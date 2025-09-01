@@ -20,6 +20,14 @@ public class Person {
 		this.password = password;
 	}
 
+	public Person(String firstName, String lastName, int age, String email, String password) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.age = age;
+		this.email = email;
+		this.password = password;
+	}
+
 	public int getId() {
 		return id;
 	}

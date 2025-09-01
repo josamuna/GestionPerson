@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS gestion_person;
 USE gestion_person;
-CREATE TABLE person(
+CREATE TABLE person(
     id INT AUTO_INCREMENT,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,

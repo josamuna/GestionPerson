@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.josamuna.project.model.Person;
@@ -51,23 +52,22 @@ public class MySQLPersonDAO implements PersonDAO {
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to save person!");
 		}
-
 	}
 
 	@Override
 	public void update(Person person) {
 		String sql = "UPDATE person SET firstname=?,lastname=?,age=?,email=?,password=? WHERE id=?";
-		
-		try (Connection con = getConnection()){
+
+		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, person.getFirstName());
 			ps.setString(2, person.getLastName());
 			ps.setInt(3, person.getAge());
 			ps.setString(4, person.getEmail());
 			ps.setInt(5, person.getId());
-			
+
 			ps.executeQuery();
-			
+
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to update person!");
 		}
@@ -77,13 +77,13 @@ public class MySQLPersonDAO implements PersonDAO {
 	@Override
 	public void delete(Person person) {
 		String sql = "DELETE FROM person WHERE id=?";
-		
+
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, person.getId());
-			
+
 			ps.executeQuery();
-			
+
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to delete person!");
 		}
@@ -92,34 +92,65 @@ public class MySQLPersonDAO implements PersonDAO {
 
 	@Override
 	public Person findPersonById(int id) {
-		String sql = "SELECT firstname, lastname, age, email, password FROM person WHERE id=?";
-		
+		String sql = "SELECT id, firstname, lastname, age, email, password FROM person WHERE id=?";
+
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
-			
+
 			ResultSet rs = ps.executeQuery();
-			if(rs.next()) {
-				return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"), rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+			if (rs.next()) {
+				return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
 			}
-			
+
 		} catch (Exception e) {
-			throw new RuntimeException("Failed to shos information data!");
+			throw new RuntimeException("Failed to get person's information data!");
 		}
-		
+
 		return null;
 	}
 
 	@Override
 	public Person findPersonByName(String firstName) {
-		// TODO Auto-generated method stub
+		String sql = "SELECT id, firstname, lastname, age, email, password FROM person WHERE firstname like ?";
+
+		try (Connection con = getConnection()) {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, firstName);
+
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+			}
+
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get person's information data!");
+		}
 		return null;
 	}
 
 	@Override
 	public List<Person> findPersons() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT id, firstname, lastname, age, email, password FROM person";
+		List<Person> persons = new ArrayList<>();
+
+		try (Connection con = getConnection()) {
+			PreparedStatement ps = con.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Person person = new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+				persons.add(person);
+			}
+
+			return persons;
+
+		} catch (Exception e) {
+			throw new RuntimeException("Failed to get all persons's information data!");
+		}
 	}
 
 }
