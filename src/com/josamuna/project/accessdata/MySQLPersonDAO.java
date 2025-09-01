@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class MySQLPersonDAO implements PersonDAO {
 			ps.setString(4, person.getEmail());
 			ps.setString(5, person.getPassword());
 
-			ps.executeQuery();
+			ps.executeUpdate();
 
 			ResultSet rs = ps.getGeneratedKeys();
 
@@ -50,6 +51,7 @@ public class MySQLPersonDAO implements PersonDAO {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to save person!");
 		}
 	}
@@ -66,9 +68,10 @@ public class MySQLPersonDAO implements PersonDAO {
 			ps.setString(4, person.getEmail());
 			ps.setInt(5, person.getId());
 
-			ps.executeQuery();
+			ps.executeUpdate();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to update person!");
 		}
 
@@ -82,9 +85,10 @@ public class MySQLPersonDAO implements PersonDAO {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, person.getId());
 
-			ps.executeQuery();
+			ps.executeUpdate();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to delete person!");
 		}
 
@@ -105,6 +109,7 @@ public class MySQLPersonDAO implements PersonDAO {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to get person's information data!");
 		}
 
@@ -126,6 +131,7 @@ public class MySQLPersonDAO implements PersonDAO {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to get person's information data!");
 		}
 		return null;
@@ -149,6 +155,7 @@ public class MySQLPersonDAO implements PersonDAO {
 			return persons;
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new RuntimeException("Failed to get all persons's information data!");
 		}
 	}
