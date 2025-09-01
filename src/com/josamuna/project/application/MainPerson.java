@@ -24,7 +24,9 @@ public class MainPerson {
 		Person p3 = new Person("Alice", "Alimasi",42, "alice@primus.com","P@ssword");
 		service.create(p3);
 		
-		service.listPersons();
+		service.listPersons().forEach(person -> {
+			System.out.println(person.toString());
+		});;
 		
 	}
 

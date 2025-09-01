@@ -1,5 +1,6 @@
 package com.josamuna.project.accessdata;
 
+import java.awt.Taskbar.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,7 +36,7 @@ public class MySQLPersonDAO implements PersonDAO {
 		String sql = "INSERT INTO person(firstname,lastname,age,email,password) VALUES(?,?,?,?,?)";
 
 		try (Connection con = getConnection()) {
-			PreparedStatement ps = con.prepareStatement(sql);
+			PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, person.getFirstName());
 			ps.setString(2, person.getLastName());
 			ps.setInt(3, person.getAge());
@@ -44,10 +45,11 @@ public class MySQLPersonDAO implements PersonDAO {
 
 			ps.executeUpdate();
 
-			ResultSet rs = ps.getGeneratedKeys();
+			try (ResultSet rs = ps.getGeneratedKeys()) {
 
-			if (rs.next()) {
-				person.setId(rs.getInt(1));
+				if (rs.next()) {
+					person.setId(rs.getInt(1));
+				}
 			}
 
 		} catch (Exception e) {
