@@ -1,6 +1,5 @@
 package com.josamuna.project.accessdata;
 
-import java.awt.Taskbar.State;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,7 +14,7 @@ import com.josamuna.project.model.PersonDAO;
 
 public class MySQLPersonDAO implements PersonDAO {
 
-	private final String url = "jdbc:mysql://localhost:3306/gestion_person";// ?user=root&password=''&serverTimezone=UTC
+	private final String url = "jdbc:mysql://localhost:3306/gestion_person";
 	private final String user = "root";
 	private final String password = "";
 
@@ -32,7 +31,7 @@ public class MySQLPersonDAO implements PersonDAO {
 	}
 
 	@Override
-	public void save(Person person) {
+	public void save(Person person) throws SQLException {
 		String sql = "INSERT INTO person(firstname,lastname,age,email,password) VALUES(?,?,?,?,?)";
 
 		try (Connection con = getConnection()) {
@@ -49,17 +48,14 @@ public class MySQLPersonDAO implements PersonDAO {
 
 				if (rs.next()) {
 					person.setId(rs.getInt(1));
+					System.out.println("Person saved successfully.");
 				}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to save person!");
 		}
 	}
 
 	@Override
-	public void update(Person person) {
+	public void update(Person person) throws SQLException {
 		String sql = "UPDATE person SET firstname=?,lastname=?,age=?,email=?,password=? WHERE id=?";
 
 		try (Connection con = getConnection()) {
@@ -68,98 +64,98 @@ public class MySQLPersonDAO implements PersonDAO {
 			ps.setString(2, person.getLastName());
 			ps.setInt(3, person.getAge());
 			ps.setString(4, person.getEmail());
-			ps.setInt(5, person.getId());
+			ps.setString(5, person.getPassword());
+			ps.setInt(6, person.getId());
 
-			ps.executeUpdate();
+			int record = ps.executeUpdate();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to update person!");
-		}
+			if (record > 0) {
+				System.out.println("Person updated successfully.");
+			}
+
+		} 
 
 	}
 
 	@Override
-	public void delete(Person person) {
+	public void delete(Person person) throws SQLException {
 		String sql = "DELETE FROM person WHERE id=?";
 
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, person.getId());
 
-			ps.executeUpdate();
+			int record = ps.executeUpdate();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to delete person!");
-		}
+			if (record > 0) {
+				System.out.println("Person deleted successfully.");
+			} else {
+				throw new IllegalArgumentException(String.format("The Person %s doesn't exist.", person.toString()));
+			}
+
+		} 
 
 	}
 
 	@Override
-	public Person findPersonById(int id) {
+	public Person findPersonById(int id) throws SQLException {
 		String sql = "SELECT id, firstname, lastname, age, email, password FROM person WHERE id=?";
 
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, id);
 
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
-						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+							rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+				}
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to get person's information data!");
-		}
+		} 
 
 		return null;
 	}
 
 	@Override
-	public Person findPersonByName(String firstName) {
+	public Person findPersonByName(String firstName) throws SQLException {
 		String sql = "SELECT id, firstname, lastname, age, email, password FROM person WHERE firstname like ?";
 
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setString(1, firstName);
 
-			ResultSet rs = ps.executeQuery();
-			if (rs.next()) {
-				return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
-						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+							rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+				}
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to get person's information data!");
-		}
+		} 
+		
 		return null;
 	}
 
 	@Override
-	public List<Person> findPersons() {
+	public List<Person> findPersons() throws SQLException {
 		String sql = "SELECT id, firstname, lastname, age, email, password FROM person";
 		List<Person> persons = new ArrayList<>();
 
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Person person = new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
-						rs.getInt("age"), rs.getString("email"), rs.getString("password"));
-				persons.add(person);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Person person = new Person(rs.getInt("id"), rs.getString("firstname"), rs.getString("lastname"),
+							rs.getInt("age"), rs.getString("email"), rs.getString("password"));
+					persons.add(person);
+				}
 			}
 
 			return persons;
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Failed to get all persons's information data!");
-		}
+		} 
 	}
 
 }
