@@ -10,13 +10,14 @@ import com.josamuna.project.service.PersonService;
 public class MainPerson {
 
 	public static void main(String[] args) {
-		// Get Database access
-		PersonDAO dao = new MySQLPersonDAO();
-
-		// Get Service access
-		PersonService service = new PersonService(dao);
 
 		try {
+			// Get Database access
+			PersonDAO dao = new MySQLPersonDAO();
+			
+			// Get Service access
+			PersonService service = new PersonService(dao);
+			
 			// Add new Persons
 			Person p1 = new Person("Jos", "Isa", 15, "jos@jos.com", "pwd");
 			service.create(p1);

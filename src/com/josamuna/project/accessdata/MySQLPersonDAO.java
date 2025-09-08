@@ -17,12 +17,14 @@ public class MySQLPersonDAO implements PersonDAO {
 	private final String url = "jdbc:mysql://localhost:3306/gestion_person";
 	private final String user = "root";
 	private final String password = "";
+	
+	private final String driver = "com.mysql.cj.jdbc.Driver";
 
-	public MySQLPersonDAO() {
+	public MySQLPersonDAO() throws ClassNotFoundException {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException ec) {
-			throw new RuntimeException("Driver not found!");
+			Class.forName(driver);
+		} catch (ClassNotFoundException ex) {
+			throw new ClassNotFoundException("Driver not found!");
 		}
 	}
 
