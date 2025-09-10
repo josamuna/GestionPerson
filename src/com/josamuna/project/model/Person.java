@@ -41,6 +41,9 @@ public class Person {
 	}
 
 	public void setFirstName(String firstName) {
+		if (firstName == null || firstName.isEmpty()) {
+			throw new IllegalArgumentException("The firstName is mandatory!");
+		}
 		this.firstName = firstName;
 	}
 
@@ -49,6 +52,9 @@ public class Person {
 	}
 
 	public void setLastName(String lastName) {
+		if (lastName == null || lastName.isEmpty()) {
+			throw new IllegalArgumentException("The lastName is mandatory!");
+		}
 		this.lastName = lastName;
 	}
 
@@ -57,6 +63,9 @@ public class Person {
 	}
 
 	public void setAge(int age) {
+		if (age <= 0) {
+			throw new IllegalArgumentException("Please provide a valid age!");
+		}
 		this.age = age;
 	}
 
@@ -65,6 +74,13 @@ public class Person {
 	}
 
 	public void setEmail(String email) {
+		if (email == null || email.isEmpty()) {
+			throw new IllegalArgumentException("The email address is mandatory!");
+		}
+
+		if (!email.contains("@")) {
+			throw new IllegalArgumentException("Please provide a valid email address!");
+		}
 		this.email = email;
 	}
 
@@ -73,6 +89,9 @@ public class Person {
 	}
 
 	public void setPassword(String password) {
+		if (password == null || password.isEmpty()) {
+			throw new IllegalArgumentException("Please provide a valid password!");
+		}
 		this.password = password;
 	}
 

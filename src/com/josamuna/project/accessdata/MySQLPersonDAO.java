@@ -102,7 +102,7 @@ public class MySQLPersonDAO implements PersonDAO {
 	@Override
 	public Person findPersonById(int id) throws SQLException {
 		String sql = "SELECT id, firstname, lastname, age, email, password FROM person WHERE id=?";
-
+		
 		try (Connection con = getConnection()) {
 			PreparedStatement ps = con.prepareStatement(sql);
 			ps.setInt(1, id);

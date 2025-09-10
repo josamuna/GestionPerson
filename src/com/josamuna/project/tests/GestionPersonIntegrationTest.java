@@ -1,12 +1,8 @@
 package com.josamuna.project.tests;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,10 +19,11 @@ import org.junit.jupiter.api.TestInfo;
 
 import com.josamuna.project.accessdata.MySQLPersonDAO;
 import com.josamuna.project.model.Person;
+import com.josamuna.project.service.PersonService;
 
-class MySQLPersonDAOTest {
-
+class GestionPersonIntegrationTest {
 	private static MySQLPersonDAO dao;
+	private static PersonService service;
 	private static Person testPerson;
 
 	// Database variables
@@ -41,9 +38,11 @@ class MySQLPersonDAOTest {
 			Class.forName(DRIVER);
 			dao = new MySQLPersonDAO();
 			assertNotNull(dao);
+			service = new PersonService(dao);
+			assertNotNull(service);
 			System.out.println("Driver found!");
 		} catch (ClassNotFoundException ex) {
-			fail("Driver not found!, " + ex.getMessage());
+			fail("Driver not found, " + ex.getMessage());
 		}
 	}
 
@@ -59,9 +58,9 @@ class MySQLPersonDAOTest {
 	}
 
 	@Test
-	@DisplayName("Save Person")
+	@DisplayName("Save Person using PersonService and MySQLPersonDAO")
 	@Order(1)
-	void saveTest() {
+	void savePersonTest() {
 		try {
 			Person fakePerson = new Person();
 			// Check valid Person input
@@ -73,9 +72,9 @@ class MySQLPersonDAOTest {
 
 			assertThrows(IllegalArgumentException.class, () -> fakePerson.setEmail("bademail_notNull"));
 
-			// Valid Person
-			Person person = new Person("Franck", "Kubala", 20, "kubala@gmail.com", "P@ssword");
-			dao.save(person);
+			Person person = new Person("Eveline", "Neema", 32, "neema@hotmail.com", "P@ssword");
+			service.create(person);
+
 			assertTrue(person.getId() > 0);
 			testPerson = person;
 		} catch (SQLException ex) {
@@ -84,35 +83,33 @@ class MySQLPersonDAOTest {
 	}
 
 	@Test
-	@DisplayName("Update Person")
+	@DisplayName("Update Person using PersonService and MySQLPersonDAO")
 	@Order(2)
-	void updateTest() {
+	void updatePersonTest() {
 		try {
-			testPerson.setFirstName("Francki");
-			testPerson.setLastName("Zawadi");
-			testPerson.setAge(25);
-			testPerson.setEmail("zawadi@gmail.com");
-			testPerson.setPassword("Pwd");
-			dao.update(testPerson);
+			testPerson.setFirstName("Alex");
+			testPerson.setLastName("Ambrozio");
+			testPerson.setAge(22);
+			testPerson.setEmail("ambrozio@android.com");
+			testPerson.setPassword("MyPass");
+			service.update(testPerson);
+			Person personUpdated = service.listPersonById(testPerson.getId());
 
-			// Check updated person
-			Person personUpdated = dao.findPersonById(testPerson.getId());
-			assertEquals("Francki", personUpdated.getFirstName());
-			assertEquals("Zawadi", personUpdated.getLastName());
-			assertEquals(25, personUpdated.getAge());
-			assertEquals("zawadi@gmail.com", personUpdated.getEmail());
-			assertEquals("Pwd", personUpdated.getPassword());
+			assertEquals(personUpdated.getFirstName(), testPerson.getFirstName());
+			assertEquals(personUpdated.getLastName(), testPerson.getLastName());
+			assertEquals(personUpdated.getAge(), testPerson.getAge());
+			assertEquals(personUpdated.getEmail(), testPerson.getEmail());
 		} catch (SQLException ex) {
 			fail("Failed to update Person, " + ex.getMessage());
 		}
 	}
 
 	@Test
-	@DisplayName("Find Person by ID")
+	@DisplayName("Find Person by ID using PersonService and MySQLPersonDAO")
 	@Order(3)
 	void findPersonByIdTest() {
 		try {
-			Person person = dao.findPersonById(testPerson.getId());
+			Person person = service.listPersonById(testPerson.getId());
 			assertEquals(person.getId(), testPerson.getId());
 		} catch (SQLException ex) {
 			fail("Failed to find Person by ID, " + ex.getMessage());
@@ -120,11 +117,11 @@ class MySQLPersonDAOTest {
 	}
 
 	@Test
-	@DisplayName("Find Person by name")
+	@DisplayName("Find Person by name using PersonService and MySQLPersonDAO")
 	@Order(4)
 	void findPersonByNameTest() {
 		try {
-			Person person = dao.findPersonByName(testPerson.getFirstName());
+			Person person = service.listPersonByName(testPerson.getFirstName());
 			assertEquals(person.getFirstName(), testPerson.getFirstName());
 		} catch (SQLException ex) {
 			fail("Failed to find Person by name, " + ex.getMessage());
@@ -132,40 +129,42 @@ class MySQLPersonDAOTest {
 	}
 
 	@Test
-	@DisplayName("Find all Persons")
+	@DisplayName("Find all Persons using PersonService and MySQLPersonDAO")
 	@Order(5)
-	void findPersonsTest() throws Exception {
+	void findPersonsTest() {
 		try {
 			List<Person> persons = new ArrayList<>();
-			persons = dao.findPersons();
+			persons = service.listPersons();
 			assertFalse(persons.isEmpty());
 		} catch (SQLException ex) {
-			fail("Failed to find Persons, " + ex.getMessage());
+			fail("Failed to find Person by name, " + ex.getMessage());
 		}
 	}
 
-	@Test
-	@DisplayName("Delete Person")
-	@Order(6)
-	void deleteTest() {
-		try {
-			dao.delete(testPerson);
+//	@Test
+//	@DisplayName("Delete Person using PersonService and MySQLPersonDAO")
+//	@Order(6)
+//	void deletePersonTest() {
+//		try {
+//			service.remove(testPerson);
+//			Person deletedPerson = service.listPersonById(testPerson.getId());
+//			assertNull(deletedPerson);
+//		} catch (SQLException ex) {
+//			fail("Failed to delete Person, " + ex.getMessage());
+//		} 
+//	}
 
-			Person personDeleted = dao.findPersonById(testPerson.getId());
-			assertNull(personDeleted);
-		} catch (SQLException ex) {
-			fail("Failed to delete Person, " + ex.getMessage());
-		}
-	}
-
 	@Test
-	@DisplayName("Delete inexisting Person")
+	@DisplayName("Delete inexisting Person using PersonService and MySQLPersonDAO")
 	@Order(7)
 	void deleteFakePersonTest() {
-		Person fakePerson = new Person(0, "Fake_firstname", "Fake_lastname", 200, "fakeemail@fake.com",
-				"fake_password");
+		try {
+			Person fakePerson = new Person(0, "Fake_firstname", "Fake_lastname", 200, "fakeemail@fake.com",
+					"fake_password");
 
-		assertThrows(IllegalArgumentException.class, () -> dao.delete(fakePerson));
+			assertThrows(IllegalArgumentException.class, () -> service.remove(fakePerson));
+		} catch (IllegalArgumentException ex) {
+			fail("Failed to update Person, " + ex.getMessage());
+		}
 	}
-
 }

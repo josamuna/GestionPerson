@@ -7,19 +7,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationsTest {
+class AnnotationsTest {
 	@BeforeEach
-	public void beforeEach() throws Exception {
+	void beforeEach() throws Exception {
 		System.out.println("BeforeEach");
 	}
 	
 	@BeforeAll
-	public static void beforeClass() throws Exception {
+	static void beforeClass() throws Exception {
 		System.out.println("BeforeAll");
 	}
 	
 	@AfterEach
-	public void afterEach() throws Exception {
+	void afterEach() throws Exception {
 		System.out.println("AfterEach");
 	}
 	
@@ -28,22 +28,22 @@ public class AnnotationsTest {
 		System.out.println("AfterAll");
 	}
 	@Test
-	public void test1() {
+	void test1() {
 		System.out.println("Test1");
 	}
 	
 	@Test
-	public void test2() {
+	void test2() {
 		System.out.println("Test2");
 	}
 	
 	@Test
-	public void test3() {
+	void test3() {
 		System.out.println("Test3");
 	}
 	
 	@Ignore
-	public void test4() {
+	void test4() {
 		System.out.println("Ignore");
 	}
 }

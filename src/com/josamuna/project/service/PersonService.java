@@ -14,27 +14,6 @@ public class PersonService {
 	}
 
 	public void create(Person person) throws SQLException {
-		// Validate field before saving.
-		if (person.getFirstName() == null || person.getFirstName().isEmpty()) {
-			throw new IllegalArgumentException("The firstName is mandatory!");
-		}
-
-		if (person.getLastName() == null || person.getLastName().isEmpty()) {
-			throw new IllegalArgumentException("The lastName is mandatory!");
-		}
-		
-		if(person.getAge() <= 0) {
-			throw new IllegalArgumentException("Please provide a valid age!");
-		}
-
-		if (!person.getEmail().contains("@")) {
-			throw new IllegalArgumentException("Please provide a valid email address!");
-		}
-
-		if (person.getPassword() == null || person.getPassword().isEmpty()) {
-			throw new IllegalArgumentException("Please provide a valid password!");
-		}
-
 		dao.save(person);
 	}
 
