@@ -13,14 +13,17 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.josamuna.project.accessdata.MySQLPersonDAO;
 import com.josamuna.project.model.Person;
 import com.josamuna.project.service.PersonService;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class GestionPersonIntegrationTest {
 	private static MySQLPersonDAO dao;
 	private static PersonService service;
@@ -141,18 +144,18 @@ class GestionPersonIntegrationTest {
 		}
 	}
 
-//	@Test
-//	@DisplayName("Delete Person using PersonService and MySQLPersonDAO")
-//	@Order(6)
-//	void deletePersonTest() {
-//		try {
-//			service.remove(testPerson);
-//			Person deletedPerson = service.listPersonById(testPerson.getId());
-//			assertNull(deletedPerson);
-//		} catch (SQLException ex) {
-//			fail("Failed to delete Person, " + ex.getMessage());
-//		} 
-//	}
+	@Test
+	@DisplayName("Delete Person using PersonService and MySQLPersonDAO")
+	@Order(6)
+	void deletePersonTest() {
+		try {
+			service.remove(testPerson);
+			Person deletedPerson = service.listPersonById(testPerson.getId());
+			assertNull(deletedPerson);
+		} catch (SQLException ex) {
+			fail("Failed to delete Person, " + ex.getMessage());
+		} 
+	}
 
 	@Test
 	@DisplayName("Delete inexisting Person using PersonService and MySQLPersonDAO")

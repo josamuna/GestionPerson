@@ -17,13 +17,16 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.josamuna.project.accessdata.MySQLPersonDAO;
 import com.josamuna.project.model.Person;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class MySQLPersonDAOTest {
 
 	private static MySQLPersonDAO dao;
