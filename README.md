@@ -4,12 +4,12 @@ Managing a sample project using 🔗[Jira](https://www.atlassian.com/software/ji
 
 ## 🎯 Keys Points
 
-✅ Software feasibility study.
-✅ Software requirement Analysis.
-✅ Software design.
-✅ Software development.
-✅ Software testing.
-✅ Tracking the project on Jira.
+- ✅ Software feasibility study.
+- ✅ Software requirement Analysis.
+- ✅ Software design.
+- ✅ Software development.
+- ✅ Software testing.
+- ✅ Tracking the project on Jira.
 
 ### 🔔 Sofware feasibility study
 
@@ -52,7 +52,7 @@ Managing a sample project using 🔗[Jira](https://www.atlassian.com/software/ji
 
 ### 👨🏻🧑🏽‍💻 Software development
 
-> During the software development stage, source code is written in a specific programming language (in this case, [Java](https://www.oracle.com/java/). Most of the time, this is done with the help of IDEs ([Eclipse](https://www.eclipse.org/downloads/) or [VSCode](https://code.visualstudio.com/) in our case) to improve productivity. These tools format code, refactor it, etc., and provide IntelliSense features.
+> During the software development stage, source code is written in a specific programming language (in this case, [Java](https://www.oracle.com/java/)). Most of the time, this is done with the help of IDEs ([Eclipse](https://www.eclipse.org/downloads/) or [VSCode](https://code.visualstudio.com/) in our case) to improve productivity. These tools format code, refactor it, etc., and provide IntelliSense features.
 
 In this project, the source code has breaking down in _`five java packages`_, which acts as _`modules`_:
 
@@ -86,8 +86,9 @@ CREATE TABLE person(
 
 ### 🛠️ Software testing
 
-> Testing begins when the development phase reaches a certain point or is done (depending on the team and project). This project employs automated testing with [JUnit](https://junit.org). [JUnit v5.13.4 user guide](https://docs.junit.org/current/user-guide/junit-user-guide-5.13.4.pdf) is availqble on this link.
-> Before beginning the testing process, a comprehensive **Testing Plan** should be created and followed to ensure that everything works as planned. This was not included in this project, but a test case sheet was produced for the test cases that were completed. Also, the UI is unavailable because everything is done in console mode.
+> Testing begins when the development phase reaches a certain point or is done (depending on the team and project). This project employs automated testing with [JUnit](https://junit.org). The user guide of **JUnit v5.13.4** is available [on this link](https://docs.junit.org/current/user-guide/junit-user-guide-5.13.4.pdf) is available on this link.
+
+> Before beginning the testing process, a comprehensive **Testing Plan** should be created and followed to ensure that everything works as planned. This was not included in this project, but a [**Test case sheet**](https://github.com/josamuna/GestionPerson/tree/main/docs/TestCaseSheet.xlsx) was produced for the test cases that were completed. Also, the UI is unavailable because everything is done in console mode.
 
 #### Unit testing ✔️
 
@@ -99,4 +100,26 @@ CREATE TABLE person(
 
 ### 🎫. Tracking the project on Jira
 
-> Once
+> Jira is one of the best tools for tracking software projects and collaborating with all team members while increasing efficiency. This can monitor all stages, including _'Requirement'_, _'Design'_, _'Development'_, _'Testing'_, _'Deployment'_, and _'User Feedback'_. For this project, we have only added a few of them, not all of them.
+
+#### Requirement ☑️
+
+![Image](https://github.com/user-attachments/assets/6e07c6b1-ae68-40b8-8914-b1cc63c5439c)
+
+#### Design ☑️
+
+![Image](https://github.com/user-attachments/assets/2076696b-cae1-4273-9d7e-4843a99b3ab8)
+
+#### Devlopement ☑️
+
+![Image](https://github.com/user-attachments/assets/2137ea2a-9a9c-46f6-a88d-4dcfa2ad18dd)
+
+#### Testing ☑️
+
+![Image](https://github.com/user-attachments/assets/3abb0e9e-76ba-4e3f-bd30-97b0e6c63078)
+
+![Image](https://github.com/user-attachments/assets/410e4b16-515e-46ea-84f5-5bed489bec88)
+
+### 💬. Suggestions
+
+> If you have any suggestions or concerns, please make a pull request.
